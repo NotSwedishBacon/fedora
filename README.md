@@ -5,7 +5,6 @@ This README documents the personal steps I use to set up a fresh Fedora Silverbl
 ## Quick overview
 - Install RPM Fusion repos, install codecs and personal overrides 
 - Configure Flatpak remotes and apps
-- Add automatic Flatpak update timer
 - Add on auto-staged updates and hardware/kernel settings
 
 ## 1) Add RPM Fusion
