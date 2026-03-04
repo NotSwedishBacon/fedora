@@ -7,25 +7,34 @@ This README documents the personal steps I use to set up a fresh Fedora Silverbl
 - Configure Flatpak remotes and apps
 - Add on auto-staged updates and hardware/kernel settings
 
-## 1) Add RPM Fusion
+## 1) Add RPM Fusion repos
 ```bash
 sudo rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
   https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-systemctl reboot
 ```
 
 ## 2) Flatpak setup
 ```bash
 # Add Flathub
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
 
+```bash
 # Reinstall existing apps from Flathub
 flatpak install --reinstall flathub $(flatpak list --app-runtime=org.fedoraproject.Platform --columns=application | tail -n +1 )
+```
 
+```bash
 # Remove Fedora remote 
-flatpak remote-delete fedora fedora-testing
+flatpak remote-delete fedora
+```
 
+```bash
+# Remove Fedora testing
+flatpak remote-delete fedora-testing
+```
+
+```bash
 # Install my flatpaks 
 flatpak install com.github.tchx84.Flatseal \
   com.prusa3d.PrusaSlicer \
@@ -36,7 +45,8 @@ flatpak install com.github.tchx84.Flatseal \
   org.inkscape.Inkscape \
   org.libreoffice.LibreOffice \
   org.mozilla.firefox \
-  org.telegram.desktop
+  org.telegram.desktop \
+  com.discordapp.Discord
 ```
 
 ## 3) System and service tweaks
@@ -45,7 +55,45 @@ flatpak install com.github.tchx84.Flatseal \
 sudo systemctl disable NetworkManager-wait-online.service
 ```
 
-## 4) Codecs, drivers and layered packages
+## 4) Setup automatic system updates
+Edit `/etc/rpm-ostreed.conf` and set:
+
+```ini
+[Daemon]
+AutomaticUpdatePolicy=stage
+```
+
+Then start/enable the rpm-ostreed automatic timer:
+```bash
+sudo systemctl start rpm-ostreed    # or reload
+```
+
+```bash
+sudo systemctl enable --now rpm-ostreed-automatic.timer
+```
+
+## 5) Disable RAOP in PipeWire so we don't find Airplay devices
+```bash
+mkdir -p ~/.config/pipewire/pipewire.conf.d/
+```
+
+```bash
+cd ~/.config/pipewire/pipewire.conf.d/
+```
+
+```bash
+# Add this to the conf file
+# context.properties = { module.raop = false }
+nano disable-raop.conf
+```
+
+## 6) Reboot here
+
+```bash
+systemctl reboot
+```
+
+## 7) Codecs, drivers and layered packages
 
 Why these choices:
 - `firefox`: I remove the distro `firefox` here because I prefer to run the Flatpak `org.mozilla.firefox` for sandboxing and easier updates.
@@ -63,7 +111,9 @@ rpm-ostree install \
   gstreamer1-plugins-ugly \
   gstreamer1-vaapi \
   --allow-inactive
+```
 
+```bash
 rpm-ostree override remove \
   firefox \
   firefox-langpacks \
@@ -78,28 +128,14 @@ rpm-ostree override remove \
   libswscale-free \
   ffmpeg-free \
   --install ffmpeg
+```
 
+```bash
 # Allow upgrades to later Fedora versions
 sudo rpm-ostree update --uninstall rpmfusion-free-release --uninstall rpmfusion-nonfree-release --install rpmfusion-free-release --install rpmfusion-nonfree-release
-
-systemctl reboot
 ```
 
-## 5) Setup automatic system updates
-Edit `/etc/rpm-ostreed.conf` and set:
-
-```ini
-[Daemon]
-AutomaticUpdatePolicy=stage
-```
-
-Then start/enable the rpm-ostreed automatic timer:
-```bash
-sudo systemctl start rpm-ostreed    # or reload
-sudo systemctl enable --now rpm-ostreed-automatic.timer
-```
-
-## 6) Intel i915 kernel/module options (if applicable)
+## 8) Intel i915 kernel/module options (if applicable)
 Create or edit `/etc/modprobe.d/i915.conf` with:
 
 ```text
@@ -112,16 +148,7 @@ Then regenerate initramfs enabling the modprobe file so it is included:
 sudo rpm-ostree initramfs --enable --arg=-I --arg=/etc/modprobe.d/i915.conf
 ```
 
-## 7) Disable RAOP in PipeWire so we don't find Airplay devices
-```bash
-mkdir -p ~/.config/pipewire/pipewire.conf.d/
-cd ~/.config/pipewire/pipewire.conf.d/
-touch disable-raop.conf
-# Edit disable-raop.conf and add:
-# context.properties = { module.raop = false }
-```
-
-## 8) Disable GNOME donation popups
+## 9) Disable GNOME donation popups
 Sometimes GNOME shows occasional donation/reminder popups. To check the current
 setting run:
 
@@ -135,4 +162,9 @@ To disable the donation reminder/popups, run:
 gsettings set org.gnome.settings-daemon.plugins.housekeeping donation-reminder-enabled false
 ```
 
+## 10) One final reboot
+
+```bash
+systemctl reboot
+```
 
