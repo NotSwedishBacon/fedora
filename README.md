@@ -46,7 +46,8 @@ flatpak install com.github.tchx84.Flatseal \
   org.libreoffice.LibreOffice \
   org.mozilla.firefox \
   org.telegram.desktop \
-  com.discordapp.Discord
+  com.discordapp.Discord \
+  com.freerdp.FreeRDP
 ```
 
 ## 3) System and service tweaks
@@ -105,6 +106,7 @@ rpm-ostree install \
   intel-media-driver \
   distrobox \
   gnome-tweaks \
+  podman-compose \
   gstreamer1-plugin-libav \
   gstreamer1-plugins-bad-free-extras \
   gstreamer1-plugins-bad-freeworld \
