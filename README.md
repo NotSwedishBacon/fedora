@@ -1,4 +1,4 @@
-# Fedora Silverblue — Personal Setup Notes
+# Fedora Kinoite — Personal Setup Notes
 
 This README documents the personal steps I use to set up a fresh Fedora Silverblue installation. Use at your own risk — adapt to your hardware and preferences.
 
