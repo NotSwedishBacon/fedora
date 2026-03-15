@@ -1,6 +1,6 @@
 # Fedora Kinoite — Personal Setup Notes
 
-This README documents the personal steps I use to set up a fresh Fedora Silverblue installation. Use at your own risk — adapt to your hardware and preferences.
+This README documents the personal steps I use to set up a fresh Fedora Kinoite installation. Use at your own risk — adapt to your hardware and preferences.
 
 ## Quick overview
 - Install RPM Fusion repos, install codecs and personal overrides 
