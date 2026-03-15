@@ -39,15 +39,13 @@ flatpak remote-delete fedora-testing
 flatpak install com.github.tchx84.Flatseal \
   com.prusa3d.PrusaSlicer \
   com.ranfdev.DistroShelf \
-  io.github.flattool.Warehouse \
   it.mijorus.gearlever \
   org.gimp.GIMP \
   org.inkscape.Inkscape \
   org.libreoffice.LibreOffice \
   org.mozilla.firefox \
   org.telegram.desktop \
-  com.discordapp.Discord \
-  com.freerdp.FreeRDP
+  com.discordapp.Discord 
 ```
 
 ## 3) System and service tweaks
@@ -99,14 +97,11 @@ systemctl reboot
 Why these choices:
 - `firefox`: I remove the distro `firefox` here because I prefer to run the Flatpak `org.mozilla.firefox` for sandboxing and easier updates.
 - `distrobox`: I prefer `distrobox` over `toolbox` for a easier container workflow.
-- `gnome-tweaks`: To get back the Minimize and Maximize buttons.
 
 ```bash
 rpm-ostree install \
   intel-media-driver \
   distrobox \
-  gnome-tweaks \
-  podman-compose \
   gstreamer1-plugin-libav \
   gstreamer1-plugins-bad-free-extras \
   gstreamer1-plugins-bad-freeworld \
@@ -150,21 +145,7 @@ Then regenerate initramfs enabling the modprobe file so it is included:
 sudo rpm-ostree initramfs --enable --arg=-I --arg=/etc/modprobe.d/i915.conf
 ```
 
-## 9) Disable GNOME donation popups
-Sometimes GNOME shows occasional donation/reminder popups. To check the current
-setting run:
-
-```bash
-gsettings get org.gnome.settings-daemon.plugins.housekeeping donation-reminder-enabled
-```
-
-To disable the donation reminder/popups, run:
-
-```bash
-gsettings set org.gnome.settings-daemon.plugins.housekeeping donation-reminder-enabled false
-```
-
-## 10) One final reboot
+## 9) One final reboot
 
 ```bash
 systemctl reboot
