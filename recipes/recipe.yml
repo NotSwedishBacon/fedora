@@ -7,7 +7,7 @@ description: This is my personal OS image.
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/kinoite-main
-image-version: 44 # You can pin to a specific version of Fedora as well
+image-version: latest # You can pin to a specific version of Fedora as well
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -20,20 +20,15 @@ modules:
   - type: dnf
     repos:
       files:
-        - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
         - vscode.repo
         - mwt-packages.repo
-      keys: 
-        - https://pkg.cloudflareclient.com/pubkey.gpg
-        - https://packages.microsoft.com/keys/microsoft.asc
-        - https://mirror.mwt.me/shiftkey-desktop/gpgkey
       copr:
         - atim/starship
+        - fr1eran/antigravity-rpm
       nonfree: rpmfusion
     install:
       packages:
         - starship
-        - cloudflare-warp
         - code
         - telegram-desktop
         - discord
@@ -42,6 +37,8 @@ modules:
         - krita
         - git-lfs
         - fastfetch
+        - antigravity-app
+        - antigravity-ide
 
   - type: default-flatpaks
     configurations:
