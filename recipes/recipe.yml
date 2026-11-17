@@ -38,6 +38,7 @@ modules:
         - git-lfs
         - fastfetch
         - antigravity-app
+        - nodejs
 
   - type: default-flatpaks
     configurations:
